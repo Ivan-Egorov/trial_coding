@@ -80,6 +80,10 @@ public class TrialList<A> {
     }
 
     public void remove(int index) {
+        if (index >= count) {
+            System.out.println("Ошибка: индекс не должен быть больше длины массива");
+            return;
+        }
         A[] listCopy = Arrays.copyOf(list, count);
         Arrays.fill(list, null);
         System.arraycopy(listCopy, 0, list, 0, index);
@@ -127,6 +131,10 @@ public class TrialList<A> {
     }
 
     public A get(int index) {
+        if (index >= count) {
+            System.out.println("Ошибка: индекс не должен быть больше длины массива");
+            return null;
+        }
         return list[index];
     }
 }
