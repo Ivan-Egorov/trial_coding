@@ -1,6 +1,6 @@
-public class GeneratorBarrel implements GenerateUnit<Integer>{
+public class GeneratorBarrel implements GenerateUnit<Barrel>{
     @Override
-    public Integer getUnit() {
-        return Integer.valueOf(1);
+    public Barrel getUnit() {
+        return new Barrel.Builder().setVolume(10).setMaterial("wood").setStoredMaterial("wine").build();
     }
 }

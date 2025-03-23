@@ -1,7 +1,7 @@
-public class GeneratorAnimal implements GenerateUnit<String>{
+public class GeneratorAnimal implements GenerateUnit<Animal>{
 
     @Override
-    public String getUnit() {
-        return "Animal";
+    public Animal getUnit() {
+        return (new Animal.Builder().setSpecies("Cat").setEyeColor("Blue").setWeigth(15).setHasFur(true).build());
     }
 }

@@ -1,6 +1,6 @@
-public class GeneratorHuman implements GenerateUnit<String> {
+public class GeneratorHuman implements GenerateUnit<Human> {
     @Override
-    public String getUnit() {
-        return "Human";
+    public Human getUnit() {
+        return new Human.Builder().setGender("male").setAge(32).setLastName("Novikov").build();
     }
 }
