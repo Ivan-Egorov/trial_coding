@@ -1,5 +1,4 @@
-import java.util.ArrayList;
-
+import java.util.Scanner;
 
 public class Main {
 
@@ -7,61 +6,115 @@ public class Main {
     public static final int BARREL = 1;
     public static final int HUMAN = 2;
 
-
-
     public static void main(String[] args) {
 
-        System.out.printf("Hello and welcome!");
+        Scanner in = new Scanner(System.in);
 
-        ArrayList<String> data = getFromRandom(10, new GeneratorAnimal());
-        ArrayList<Integer> dataI = getFromRandom(10, new GeneratorBarrel());
+        boolean roundCondition = true;
 
-        int typeData = ANIMAL;
+        TrialCapsuleSorting trialCapsuleSorting = new TrialCapsuleSorting();
 
-        ArrayList dataR = switch (typeData) {
-            case ANIMAL -> getFromRandom(10, new GeneratorAnimal());
-            case BARREL -> getFromRandom(15, new GeneratorBarrel());
-            case HUMAN -> getFromRandom(20, new GeneratorHuman());
-            default -> getFromRandom(10, new GeneratorAnimal());
-        };
-
-    }
-
-    private void startSort()
-    {
-
-    }
-
-    private void startBinarySearch()
-    {
-
-    }
-
-    private ArrayList<String> getFromFile()
-    {
-        return null;
-    }
-
-    private static <T> ArrayList<T> getFromRandom(int count, GenerateUnit<T> genUnit)
-    {
-        ArrayList<T> data = new ArrayList<>();
-
-        for (int i = 0; i < count; i++)
+        while (roundCondition)
         {
-            data.add(genUnit.getUnit()); // ToDo - реализовать валидацию данных
+            if (!in.hasNext())
+                return;
+
+            if (in.next().equals("trial"))
+            {
+                if (!in.hasNext())
+                    return;
+
+                switch (in.next()) {
+                    case "help":
+                        help();
+                        break;
+
+                    case "input":
+                        input(in, trialCapsuleSorting);
+                        if(!trialCapsuleSorting.isEmptyList())
+                            trialCapsuleSorting.listToStringTest();
+                        break;
+
+                    case "sort":
+                        if(!trialCapsuleSorting.isEmptyList())
+                            trialCapsuleSorting.startSort();
+                        break;
+
+                    case "search":
+                        break;
+
+                    case "save":
+                        if(!trialCapsuleSorting.isEmptyList())
+                            trialCapsuleSorting.save();
+                        break;
+
+                    case "exit":
+                        roundCondition = false;
+                        break;
+                }
+
+            }
+
+
         }
 
-        return data;
+        in.close();
+    }
+
+    private static void input(Scanner in, TrialCapsuleSorting trialCapsuleSorting)
+    {
+        if (!in.hasNext())
+            return;
+
+        switch (in.next()) {
+            case "animal":
+                trialCapsuleSorting.setTypeData(ANIMAL);
+                break;
+            case "barrel":
+                trialCapsuleSorting.setTypeData(BARREL);
+                break;
+            case "human":
+                trialCapsuleSorting.setTypeData(HUMAN);
+                break;
+            default:
+                System.out.println("Укажите тип данных");
+                return;
+        }
+
+        if (!in.hasNext())
+            return;
+
+        switch (in.next()) {
+            case "console" -> trialCapsuleSorting.inputFromConsole(in);
+            case "random" -> trialCapsuleSorting.inputRandom(in.nextInt());
+            case "file" ->  trialCapsuleSorting.inputFromFile(in.next());
+            default -> System.out.println("Укажите источник данных");
+        }
+
+        System.out.println("Данные добавлены");
+    }
+
+    private static void search(Scanner in, TrialCapsuleSorting trialCapsuleSorting)
+    {
+        if (!in.hasNext())
+            return;
+
+        switch (in.next()) {
+            case "animal":
+                trialCapsuleSorting.startBinarySearch(ANIMAL, in);
+                break;
+            case "barrel":
+                trialCapsuleSorting.startBinarySearch(BARREL, in);
+                break;
+            case "human":
+                trialCapsuleSorting.startBinarySearch(HUMAN, in);
+                break;
+        }
 
     }
 
-    private ArrayList<String> getFromConsole()
+    private static void help()
     {
-        return null;
-    }
-
-    private void save()
-    {
-
+        System.out.println("Commands: ");
     }
 }
