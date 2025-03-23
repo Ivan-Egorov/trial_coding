@@ -43,6 +43,7 @@ public class TrialSort {
             rightArr[x] = array[mid + 1 + x];
         }
 
+
         int i = 0;
         int j = 0;
         int k = left;
