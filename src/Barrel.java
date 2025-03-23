@@ -9,7 +9,16 @@ class Barrel {
         this.material = builder.material;
     }
 
-    public class Builder {
+    @Override
+    public String toString()
+    {
+        return " Barrel - "  +
+                " Material - " + material +
+                " StoredMaterial - " + storedMaterial +
+                " Volume - " + volume;
+    }
+
+    public static class Builder {
         private int volume;
         private String storedMaterial;
         private String material;

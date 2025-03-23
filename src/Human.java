@@ -9,7 +9,16 @@ class Human {
         this.lastName = builder.lastName;
     }
 
-    public class Builder {
+    @Override
+    public String toString()
+    {
+        return " Human - "  +
+                " Gender - " + gender +
+                " LastName - " + lastName +
+                " Age - " + age;
+    }
+
+    public static class Builder {
         private String gender;
         private int age;
         private String lastName;
