@@ -1,4 +1,4 @@
-class Barrel {
+class Barrel implements Comparable<Barrel> {
     private int volume;
     private String storedMaterial;
     private String material;
@@ -7,6 +7,27 @@ class Barrel {
         this.volume = builder.volume;
         this.storedMaterial = builder.storedMaterial;
         this.material = builder.material;
+    }
+
+    public int getVolume() {
+        return volume;
+    }
+
+    public String getStoredMaterial() {
+        return storedMaterial;
+    }
+
+    public String getMaterial() {
+        return material;
+    }
+
+    @Override
+    public int compareTo(Barrel other) {
+        if (this.volume != other.volume)
+            return Integer.compare(this.volume, other.volume);
+        if (!this.storedMaterial.equalsIgnoreCase(other.storedMaterial))
+            return this.storedMaterial.compareTo(other.storedMaterial);
+        return this.material.compareTo(other.material);
     }
 
     @Override

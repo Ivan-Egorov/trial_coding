@@ -1,8 +1,3 @@
-package util;
-
-import java.util.ArrayList;
-import java.util.List;
-
 public class TrialSort {
 
     private static int minRun(int listLenght)
@@ -74,10 +69,9 @@ public class TrialSort {
     }
 
     @SuppressWarnings("unchecked")
-    public static <T extends Comparable<T>> List<T> sort(List<T> list) {
+    public static <T extends Comparable<T>> TrialList<T> sort(TrialList<T> list) {
 
         Object[] array = list.toArray();
-
 
         int length = list.size();
         int run = minRun(length);
@@ -95,7 +89,7 @@ public class TrialSort {
             }
         }
 
-        List<T> sortArray = new ArrayList<>();
+        TrialList<T> sortArray = new TrialList<>();
         for (Object e : array) {
             sortArray.add((T) e);
         }

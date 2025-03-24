@@ -1,8 +1,36 @@
-class Animal {
+class Animal implements Comparable<Animal> {
+
     private String species;
     private String eyeColor;
     private boolean hasFur;
     private int weigth;
+
+    public String getSpecies() {
+        return species;
+    }
+
+    public String getEyeColor() {
+        return eyeColor;
+    }
+
+    public boolean isHasFur() {
+        return hasFur;
+    }
+
+    public int getWeigth() {
+        return weigth;
+    }
+
+    @Override
+    public int compareTo(Animal other) {
+        if (this.weigth != other.weigth)
+            return Integer.compare(this.weigth, other.weigth);
+        if (!this.species.equalsIgnoreCase(other.species))
+            return this.species.compareTo(other.species);
+        if (!this.eyeColor.equalsIgnoreCase(other.eyeColor))
+            return this.eyeColor.compareTo(other.eyeColor);
+        return Boolean.compare(this.hasFur, other.hasFur);
+    }
 
     private Animal(Builder builder) {
         this.species = builder.species;
