@@ -1,4 +1,4 @@
-class Human {
+class Human implements Comparable<Human> {
     private String gender;
     private int age;
     private String lastName;
@@ -7,6 +7,27 @@ class Human {
         this.gender = builder.gender;
         this.age = builder.age;
         this.lastName = builder.lastName;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    @Override
+    public int compareTo(Human other) {
+        if (this.age != other.age)
+            return Integer.compare(this.age, other.age);
+        if (!this.lastName.equalsIgnoreCase(other.lastName))
+            return this.lastName.compareTo(other.lastName);
+        return this.gender.compareTo(other.gender);
     }
 
     @Override
