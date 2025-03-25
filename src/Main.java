@@ -57,8 +57,10 @@ public class Main {
                         break;
 
                     case "sort":
-                        if(!trialCapsuleSorting.isEmptyList())
+                        if(!trialCapsuleSorting.isEmptyList()) {
                             trialCapsuleSorting.startSort();
+                            trialCapsuleSorting.listToStringTest();
+                        }
                         break;
 
                     case "search":
