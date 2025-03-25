@@ -1,16 +1,27 @@
-import java.util.ArrayList;
 import java.util.Scanner;
 
 public class TrialCapsuleSorting {
 
-    private ArrayList dataR;
+    public static final String ANIMAL_CLUE = "Тип ANIMAL вводите данные в формате:\n" +
+            "[Тип животного - строка] [Цвет глаз - строка] [Наличие шерсти - true/false] [Вес - Целое натуральное число]";
+
+    public static final String BARREL_CLUE = "Тип BARREL вводите данные в формате:\n" +
+            "[Материал бочки - строка] [Хранимый материал - строка] [Объем - Целое натуральное число]";
+
+    public static final String HUMAN_CLUE = "Тип HUMAN вводите данные в формате:\n" +
+            "[Пол человека - строка] [Фамилия - строка] [Возраст - Целое натуральное число]";
+
+    public static final String EXIT_CLUE = "\nДля завершения ввода используйте:\n" +
+            "[end] или [trial]";
+
+    private TrialList dataR;
 
     private int typeData = Main.ANIMAL;
 
     public void setTypeData(int typeData)
     {
         this.typeData = typeData;
-        dataR = new ArrayList<>();
+        dataR = new TrialList<>();
     }
 
     public boolean isEmptyList()
@@ -20,6 +31,8 @@ public class TrialCapsuleSorting {
 
     public void inputRandom(int count)
     {
+        System.out.println("count - " + count);
+
         GenerateUnit genUnit = switch (typeData) {
             case Main.ANIMAL -> new GeneratorAnimal();
             case Main.BARREL -> new GeneratorBarrel();
@@ -74,30 +87,45 @@ public class TrialCapsuleSorting {
     }
 
     public void listToStringTest(){
-        dataR.forEach(r -> System.out.println(r.toString()));
+        for (int i = 0; i < dataR.size(); i++)
+        {
+            System.out.println(dataR.get(i).toString());
+        }
+
     }
 
     private void parseAnimal(Scanner in) {
 
-        boolean roundCondition = true;
-        while (roundCondition)
+        System.out.println(ANIMAL_CLUE + EXIT_CLUE);
+        while (true)
         {
             if (in.hasNext())
             {
-                String species = in.next();
+                String s = in.nextLine();
+                Scanner input = new Scanner(s);
+
+                String species = input.next();
 
                 if(species.equals("end") || species.equals("trial"))
-                    roundCondition = false;
+                    return;
 
-                if (!in.hasNext())
+                if (!input.hasNext()) {
+                    System.out.println("Не хватает данных\n" + ANIMAL_CLUE);
                     continue;
-                String eyeColor = in.next();
-                if (!in.hasNext())
+                }
+                String eyeColor = input.next();
+                if (!input.hasNextBoolean()) {
+                    System.out.println("Не хватает данных\n" + ANIMAL_CLUE);
                     continue;
-                boolean hasFur = in.nextBoolean();
-                if (!in.hasNext())
+                }
+                boolean hasFur = input.nextBoolean();
+                if (!input.hasNextInt()) {
+                    System.out.println("Не хватает данных\n" + ANIMAL_CLUE);
                     continue;
-                int weigth = in.nextInt();
+                }
+                int weigth = input.nextInt();
+
+                input.close();
 
                 dataR.add(new Animal.Builder()
                         .setSpecies(species)
@@ -112,55 +140,75 @@ public class TrialCapsuleSorting {
     }
 
     private void parseBarrel(Scanner in) {
-        boolean roundCondition = true;
-        while (roundCondition)
+
+        System.out.println(BARREL_CLUE + EXIT_CLUE);
+        while (true)
         {
             if (in.hasNext())
             {
-                String material = in.next();
+                String s = in.nextLine();
+                Scanner input = new Scanner(s);
+
+                String material = input.next();
 
                 if(material.equals("end") || material.equals("trial"))
-                    roundCondition = false;
+                    return;
 
-                if (!in.hasNext())
+                if (!input.hasNext()) {
+                    System.out.println("Не хватает данных\n" + BARREL_CLUE);
                     continue;
-                String storedMaterial = in.next();
-                if (!in.hasNext())
+                }
+                String storedMaterial = input.next();
+                if (!input.hasNextInt()) {
+                    System.out.println("Не хватает данных\n" + BARREL_CLUE);
                     continue;
-                int volume = in.nextInt();
+                }
+                int volume = input.nextInt();
 
                 dataR.add(new Barrel.Builder()
                         .setMaterial(material)
                         .setStoredMaterial(storedMaterial)
                         .setVolume(volume)
                         .build());
+
+                input.close();
             }
 
         }
     }
 
     private void parseHuman(Scanner in) {
+        System.out.println(HUMAN_CLUE + EXIT_CLUE);
         while (true)
         {
             if (in.hasNext())
             {
-                String gender = in.next();
+                String s = in.nextLine();
+                Scanner input = new Scanner(s);
+
+                String gender = input.next();
 
                 if(gender.equals("end") || gender.equals("trial"))
                     return;
 
-                if (!in.hasNext())
+                if (!input.hasNext()) {
+                    System.out.println("Не хватает данных\n" + HUMAN_CLUE);
                     continue;
-                String lastName = in.next();
-                if (!in.hasNext())
+                }
+                String lastName = input.next();
+                if (!input.hasNextInt()) {
+                    System.out.println("Не хватает данных\n" + HUMAN_CLUE);
                     continue;
-                int age = in.nextInt();
+                }
+                int age = input.nextInt();
 
                 dataR.add(new Human.Builder()
                         .setGender(gender)
                         .setLastName(lastName)
                         .setAge(age)
                         .build());
+
+                input.close();
             }
 
         }

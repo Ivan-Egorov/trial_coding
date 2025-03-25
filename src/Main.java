@@ -6,6 +6,22 @@ public class Main {
     public static final int BARREL = 1;
     public static final int HUMAN = 2;
 
+    public static final String HELP =
+            "Вас приветствуют Андрей, Иван, Дмитрий, Антон и ...\n" +
+            "Программа управляется консольным вводом и принимает следующие команды:\n" +
+                    "\t[trial] [help] - информация о программе и ее управлении.\n" +
+                    "\t[trial] [input] - переводит программу в режим ввода данных\n" +
+                        "\t\t [animal] задает соответствующий тип данных\n" +
+                        "\t\t [barrel] задает соответствующий тип данных\n" +
+                        "\t\t [human] задает соответствующий тип данных\n" +
+                            "\t\t\t [console] переводит программу в режим ввода с консоли\n" +
+                            "\t\t\t [random] ?[можете указать количество] программа генерирует данные самостоятельно\n" +
+                            "\t\t\t [file] импорт данных из файла\n" +
+                    "\t[trial] [sort]\n" +
+                    "\t[trial] [search]\n" +
+                    "\t[trial] [save]\n" +
+                    "\t[trial] [exit] - выход из программы\n";
+
     public static void main(String[] args) {
 
         Scanner in = new Scanner(System.in);
@@ -14,24 +30,29 @@ public class Main {
 
         TrialCapsuleSorting trialCapsuleSorting = new TrialCapsuleSorting();
 
+        System.out.println(HELP);
+
         while (roundCondition)
         {
             if (!in.hasNext())
-                return;
+                continue;
 
-            if (in.next().equals("trial"))
+            String s = in.nextLine();
+            Scanner commandLine = new Scanner(s);
+
+            if (commandLine.next().equals("trial"))
             {
-                if (!in.hasNext())
-                    return;
+                if (!commandLine.hasNext())
+                    continue;
 
-                switch (in.next()) {
+                switch (commandLine.next()) {
                     case "help":
-                        help();
+                        System.out.println(HELP);
                         break;
 
                     case "input":
-                        input(in, trialCapsuleSorting);
-                        if(!trialCapsuleSorting.isEmptyList())
+                        if(input(in, commandLine, trialCapsuleSorting) &&
+                                !trialCapsuleSorting.isEmptyList())
                             trialCapsuleSorting.listToStringTest();
                         break;
 
@@ -54,19 +75,21 @@ public class Main {
                 }
 
             }
-
+            commandLine.close();
 
         }
 
         in.close();
     }
 
-    private static void input(Scanner in, TrialCapsuleSorting trialCapsuleSorting)
+    private static boolean input(Scanner in, Scanner commandLine, TrialCapsuleSorting trialCapsuleSorting)
     {
-        if (!in.hasNext())
-            return;
+        if (!commandLine.hasNext()) {
+            System.out.println("Укажите тип данных");
+            return false;
+        }
 
-        switch (in.next()) {
+        switch (commandLine.next()) {
             case "animal":
                 trialCapsuleSorting.setTypeData(ANIMAL);
                 break;
@@ -78,20 +101,31 @@ public class Main {
                 break;
             default:
                 System.out.println("Укажите тип данных");
-                return;
+                return false;
         }
 
-        if (!in.hasNext())
-            return;
+        if (!commandLine.hasNext()) {
+            System.out.println("Укажите источник данных");
+            return false;
+        }
 
-        switch (in.next()) {
-            case "console" -> trialCapsuleSorting.inputFromConsole(in);
-            case "random" -> trialCapsuleSorting.inputRandom(in.nextInt());
-            case "file" ->  trialCapsuleSorting.inputFromFile(in.next());
-            default -> System.out.println("Укажите источник данных");
+        switch (commandLine.next()) {
+            case "console":
+                trialCapsuleSorting.inputFromConsole(in);
+                break;
+            case "random":
+                trialCapsuleSorting.inputRandom(commandLine.hasNextInt()? commandLine.nextInt():10);
+                break;
+            case "file":
+                trialCapsuleSorting.inputFromFile(in.next());
+                break;
+            default:
+                System.out.println("Укажите источник данных");
+                return false;
         }
 
         System.out.println("Данные добавлены");
+        return true;
     }
 
     private static void search(Scanner in, TrialCapsuleSorting trialCapsuleSorting)
@@ -113,8 +147,4 @@ public class Main {
 
     }
 
-    private static void help()
-    {
-        System.out.println("Commands: ");
-    }
 }
