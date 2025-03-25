@@ -1,4 +1,4 @@
-class Barrel implements Comparable<Barrel> {
+class Barrel implements TrialComparable<Barrel> {
     private int volume;
     private String storedMaterial;
     private String material;

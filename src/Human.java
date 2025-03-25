@@ -1,4 +1,4 @@
-class Human implements Comparable<Human> {
+class Human implements TrialComparable<Human> {
     private String gender;
     private int age;
     private String lastName;

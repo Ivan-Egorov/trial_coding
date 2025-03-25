@@ -1,4 +1,4 @@
-class Animal implements Comparable<Animal> {
+class Animal implements TrialComparable<Animal> {
 
     private String species;
     private String eyeColor;
