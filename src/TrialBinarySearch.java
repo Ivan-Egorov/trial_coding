@@ -1,4 +1,4 @@
-public class TrialBinarySearch<A> {
+public class TrialBinarySearch<A extends Comparable<A>> {
 
     public TrialBinarySearch() {
     }
@@ -15,30 +15,23 @@ public class TrialBinarySearch<A> {
         int end = trialList.size() - 1;
         int middle;
 
-        try {
-            TrialList<Comparable<A>> comparableList = (TrialList<Comparable<A>>)trialList;
-
-            while (true) {
-                if (start == end && comparableList.get(start).equals(objectToFind)) {
-                    return start;
-                } else if (start == end) {
-                    return -1;
-                }
-
-                middle = (end + start) / 2 + 1;
-
-                if (comparableList.get(middle).compareTo(objectToFind) == 0) {
-                    return middle;
-                } else if (comparableList.get(middle).compareTo(objectToFind) == -1) {
-                    start = middle;
-                } else {
-                    end = middle - 1;
-                }
+        while (start <= end) {
+            if (start == end && trialList.get(start).equals(objectToFind)) {
+                return start;
+            } else if (start == end) {
+                return -1;
             }
-        } catch (ClassCastException e) {
-            System.out.printf("%s Бинарный поиск работает только с объектами Comparable\n", e.getClass());
+
+            middle = (end + start) / 2;
+
+            if (trialList.get(middle).compareTo(objectToFind) == 0) {
+                return middle;
+            } else if (trialList.get(middle).compareTo(objectToFind) == -1) {
+                start = middle + 1;
+            } else {
+                end = middle - 1;
+            }
         }
         return -1;
     }
 }
-
