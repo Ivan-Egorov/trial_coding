@@ -1,4 +1,6 @@
-class Animal implements Comparable<Animal> {
+import java.io.Serializable;
+
+class Animal implements Comparable<Animal>, Serializable {
 
     private String species;
     private String eyeColor;
@@ -40,8 +42,7 @@ class Animal implements Comparable<Animal> {
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return " Animal - " + species +
                 " Eye color - " + eyeColor +
                 " Has fur - " + hasFur +

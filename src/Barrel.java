@@ -1,4 +1,6 @@
-class Barrel implements Comparable<Barrel> {
+import java.io.Serializable;
+
+class Barrel implements Comparable<Barrel>, Serializable {
     private int volume;
     private String storedMaterial;
     private String material;
@@ -31,9 +33,8 @@ class Barrel implements Comparable<Barrel> {
     }
 
     @Override
-    public String toString()
-    {
-        return " Barrel - "  +
+    public String toString() {
+        return " Barrel - " +
                 " Material - " + material +
                 " StoredMaterial - " + storedMaterial +
                 " Volume - " + volume;
@@ -63,5 +64,4 @@ class Barrel implements Comparable<Barrel> {
             return new Barrel(this);
         }
     }
-
 }
