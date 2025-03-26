@@ -3,13 +3,13 @@ import java.util.Scanner;
 public class TrialCapsuleSorting {
 
     public static final String ANIMAL_CLUE = "Тип ANIMAL вводите данные в формате:\n" +
-            "[Тип животного - строка] [Цвет глаз - строка] [Наличие шерсти - true/false] [Вес - Целое натуральное число]";
+            "[Тип животного - строка] [Цвет глаз - строка] [Наличие шерсти - true/false] [Вес - от 1 до 300 кг]";
 
     public static final String BARREL_CLUE = "Тип BARREL вводите данные в формате:\n" +
-            "[Материал бочки - строка] [Хранимый материал - строка] [Объем - Целое натуральное число]";
+            "[Материал бочки - строка] [Хранимый материал - строка] [Объем - от 1 до 1000 л]";
 
     public static final String HUMAN_CLUE = "Тип HUMAN вводите данные в формате:\n" +
-            "[Пол человека - строка] [Фамилия - строка] [Возраст - Целое натуральное число]";
+            "[Пол человека - строка] [Фамилия - строка] [Возраст - от 14 до 89]";
 
     public static final String EXIT_CLUE = "\nДля завершения ввода используйте:\n" +
             "[end] или [trial]";
@@ -39,7 +39,7 @@ public class TrialCapsuleSorting {
         };
 
         for (int i = 0; i < count; i++) {
-            dataR.add(genUnit.getUnit()); // ToDo - реализовать валидацию данных и обработку ошибки заполнения
+            dataR.add(genUnit.getUnit());
         }
     }
 
@@ -92,37 +92,39 @@ public class TrialCapsuleSorting {
                 String s = in.nextLine();
                 Scanner input = new Scanner(s);
 
-                String species = input.next();
+                try {
+                    String species = TrialValidator.StringValidate(input.next(), "[Тип животного - строка]");
 
-                if (species.equals("end") || species.equals("trial"))
-                    return;
+                    if (species.equals("end") || species.equals("trial"))
+                        return;
 
-                if (!input.hasNext()) {
-                    System.out.println("Не хватает данных\n" + ANIMAL_CLUE);
-                    continue;
+                    if (!input.hasNext())
+                        throw new CustomException("[Цвет глаз - строка]");
+
+                    String eyeColor = TrialValidator.StringValidate(input.next(), "[Цвет глаз - строка]");
+
+                    if (!input.hasNextBoolean())
+                        throw new CustomException("[Наличие шерсти - true/false]");
+
+                    boolean hasFur = input.nextBoolean();
+
+                    if (!input.hasNextInt())
+                        throw new CustomException("[Вес - от 1 до 300 кг]");
+
+                    int weigth = TrialValidator.IntValidate(input.nextInt(), 1, 300, "Вес за пределами диапазона 1 - 300");
+
+                    dataR.add(new Animal.Builder()
+                            .setSpecies(species)
+                            .setEyeColor(eyeColor)
+                            .setWeigth(weigth)
+                            .setHasFur(hasFur)
+                            .build());
+
+                } catch (CustomException e) {
+                    System.out.println("Некорректный ввод - " + e.getMessage() + "\n" + ANIMAL_CLUE);
                 }
-                String eyeColor = input.next();
-
-                if (!input.hasNextBoolean()) {
-                    System.out.println("Не хватает данных\n" + ANIMAL_CLUE);
-                    continue;
-                }
-                boolean hasFur = input.nextBoolean();
-
-                if (!input.hasNextInt()) {
-                    System.out.println("Не хватает данных\n" + ANIMAL_CLUE);
-                    continue;
-                }
-                int weigth = input.nextInt();
 
                 input.close();
-
-                dataR.add(new Animal.Builder()
-                        .setSpecies(species)
-                        .setEyeColor(eyeColor)
-                        .setWeigth(weigth)
-                        .setHasFur(hasFur)
-                        .build());
             }
         }
     }
@@ -135,28 +137,30 @@ public class TrialCapsuleSorting {
                 String s = in.nextLine();
                 Scanner input = new Scanner(s);
 
-                String material = input.next();
+                try {
+                    String material = TrialValidator.StringValidate(input.next(), "[Материал бочки - строка]");
 
-                if (material.equals("end") || material.equals("trial"))
-                    return;
+                    if (material.equals("end") || material.equals("trial"))
+                        return;
 
-                if (!input.hasNext()) {
-                    System.out.println("Не хватает данных\n" + BARREL_CLUE);
-                    continue;
+                    if (!input.hasNext())
+                        throw new CustomException("[Хранимый материал - строка]");
+
+                    String storedMaterial = TrialValidator.StringValidate(input.next(), "[Хранимый материал - строка]");
+
+                    if (!input.hasNextInt())
+                        throw new CustomException("[Объем - от 1 до 1000 л]");
+
+                    int volume = TrialValidator.IntValidate(input.nextInt(), 1, 1000, "[Объем - от 1 до 1000 л]");
+
+                    dataR.add(new Barrel.Builder()
+                            .setMaterial(material)
+                            .setStoredMaterial(storedMaterial)
+                            .setVolume(volume)
+                            .build());
+                } catch (CustomException e) {
+                    System.out.println("Некорректный ввод - " + e.getMessage() + "\n" + BARREL_CLUE);
                 }
-                String storedMaterial = input.next();
-
-                if (!input.hasNextInt()) {
-                    System.out.println("Не хватает данных\n" + BARREL_CLUE);
-                    continue;
-                }
-                int volume = input.nextInt();
-
-                dataR.add(new Barrel.Builder()
-                        .setMaterial(material)
-                        .setStoredMaterial(storedMaterial)
-                        .setVolume(volume)
-                        .build());
 
                 input.close();
             }
@@ -170,29 +174,30 @@ public class TrialCapsuleSorting {
                 String s = in.nextLine();
                 Scanner input = new Scanner(s);
 
-                String gender = input.next();
+                try {
+                    String gender = TrialValidator.StringValidate(input.next(), "[Пол человека - строка]");
 
-                if (gender.equals("end") || gender.equals("trial"))
-                    return;
+                    if (gender.equals("end") || gender.equals("trial"))
+                        return;
 
-                if (!input.hasNext()) {
-                    System.out.println("Не хватает данных\n" + HUMAN_CLUE);
-                    continue;
+                    if (!input.hasNext())
+                        throw new CustomException("[Фамилия - строка]");
+
+                    String lastName = TrialValidator.StringValidate(input.next(), "[Фамилия - строка]");
+
+                    if (!input.hasNextInt())
+                        throw new CustomException("[Возраст - от 14 до 89]");
+
+                    int age = TrialValidator.IntValidate(input.nextInt(), 14, 89, "[Возраст - от 14 до 89]");
+
+                    dataR.add(new Human.Builder()
+                            .setGender(gender)
+                            .setLastName(lastName)
+                            .setAge(age)
+                            .build());
+                } catch (CustomException e) {
+                    System.out.println("Некорректный ввод - " + e.getMessage() + "\n" + HUMAN_CLUE);
                 }
-                String lastName = input.next();
-
-                if (!input.hasNextInt()) {
-                    System.out.println("Не хватает данных\n" + HUMAN_CLUE);
-                    continue;
-                }
-
-                int age = input.nextInt();
-
-                dataR.add(new Human.Builder()
-                        .setGender(gender)
-                        .setLastName(lastName)
-                        .setAge(age)
-                        .build());
 
                 input.close();
             }

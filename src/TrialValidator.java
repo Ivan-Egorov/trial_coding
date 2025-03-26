@@ -1,8 +1,8 @@
 public class TrialValidator {
-    public static String StringValidate(String target) throws CustomException { 
+    public static String StringValidate(String target, String message) throws CustomException {
         String regex = "[a-zA-Z]*";
         if (target == null || target.isEmpty() || !target.matches(regex)) { 
-            throw new CustomException("Недопустимое значение");
+            throw new CustomException(message);
         }       
         return target;  
     }  

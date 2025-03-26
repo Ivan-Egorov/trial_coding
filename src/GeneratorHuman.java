@@ -14,7 +14,7 @@ public class GeneratorHuman implements GenerateUnit<Human> {
         Random random = new Random();
         return new Human.Builder()
                 .setGender(genders[random.nextInt(0, genders.length)])
-                .setAge(random.nextInt(18, 99))
+                .setAge(random.nextInt(14, 89))
                 .setLastName(lastName[random.nextInt(0, lastName.length)])
                 .build();
     }
