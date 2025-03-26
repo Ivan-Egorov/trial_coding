@@ -1,4 +1,6 @@
-class Human implements Comparable<Human> {
+import java.io.Serializable;
+
+class Human implements Comparable<Human>, Serializable {
     private String gender;
     private int age;
     private String lastName;
@@ -31,9 +33,8 @@ class Human implements Comparable<Human> {
     }
 
     @Override
-    public String toString()
-    {
-        return " Human - "  +
+    public String toString() {
+        return " Human - " +
                 " Gender - " + gender +
                 " LastName - " + lastName +
                 " Age - " + age;

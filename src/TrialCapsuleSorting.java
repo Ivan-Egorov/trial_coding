@@ -15,22 +15,20 @@ public class TrialCapsuleSorting {
             "[end] или [trial]";
 
     private TrialList dataR;
+    private TrialDataHandler dataHandler = new TrialDataHandler();
 
     private int typeData = Main.ANIMAL;
 
-    public void setTypeData(int typeData)
-    {
+    public void setTypeData(int typeData) {
         this.typeData = typeData;
         dataR = new TrialList<>();
     }
 
-    public boolean isEmptyList()
-    {
+    public boolean isEmptyList() {
         return dataR == null || dataR.isEmpty();
     }
 
-    public void inputRandom(int count)
-    {
+    public void inputRandom(int count) {
         System.out.println("count - " + count);
 
         GenerateUnit genUnit = switch (typeData) {
@@ -40,20 +38,12 @@ public class TrialCapsuleSorting {
             default -> new GeneratorAnimal();
         };
 
-        for (int i = 0; i < count; i++)
-        {
+        for (int i = 0; i < count; i++) {
             dataR.add(genUnit.getUnit()); // ToDo - реализовать валидацию данных и обработку ошибки заполнения
         }
-
     }
 
-    public void inputFromFile(String path)
-    {
-
-    }
-
-    public void inputFromConsole(Scanner in)
-    {
+    public void inputFromConsole(Scanner in) {
         switch (typeData) {
             case Main.ANIMAL:
                 parseAnimal(in);
@@ -68,27 +58,27 @@ public class TrialCapsuleSorting {
         System.out.println("Ввод окончен");
     }
 
-    public void startBinarySearch(int typeData, Scanner in)
-    {
+    public void startBinarySearch(int typeData, Scanner in) {
         if (typeData != this.typeData)
             return;
 
 
     }
 
-    public void startSort()
-    {
+    public void startSort() {
         TrialSort.sort(dataR);
     }
 
-    public void save()
-    {
-
+    public void UploadFromFile() {
+        dataR = dataHandler.UploadFromFile(dataR);
     }
 
-    public void listToStringTest(){
-        for (int i = 0; i < dataR.size(); i++)
-        {
+    public void save() {
+        dataHandler.Save(dataR);
+    }
+
+    public void listToStringTest() {
+        for (int i = 0; i < dataR.size(); i++) {
             System.out.println(i + " " + dataR.get(i).toString());
         }
 
@@ -97,16 +87,14 @@ public class TrialCapsuleSorting {
     private void parseAnimal(Scanner in) {
 
         System.out.println(ANIMAL_CLUE + EXIT_CLUE);
-        while (true)
-        {
-            if (in.hasNext())
-            {
+        while (true) {
+            if (in.hasNext()) {
                 String s = in.nextLine();
                 Scanner input = new Scanner(s);
 
                 String species = input.next();
 
-                if(species.equals("end") || species.equals("trial"))
+                if (species.equals("end") || species.equals("trial"))
                     return;
 
                 if (!input.hasNext()) {
@@ -114,11 +102,13 @@ public class TrialCapsuleSorting {
                     continue;
                 }
                 String eyeColor = input.next();
+
                 if (!input.hasNextBoolean()) {
                     System.out.println("Не хватает данных\n" + ANIMAL_CLUE);
                     continue;
                 }
                 boolean hasFur = input.nextBoolean();
+
                 if (!input.hasNextInt()) {
                     System.out.println("Не хватает данных\n" + ANIMAL_CLUE);
                     continue;
@@ -134,24 +124,20 @@ public class TrialCapsuleSorting {
                         .setHasFur(hasFur)
                         .build());
             }
-
         }
-
     }
 
     private void parseBarrel(Scanner in) {
 
         System.out.println(BARREL_CLUE + EXIT_CLUE);
-        while (true)
-        {
-            if (in.hasNext())
-            {
+        while (true) {
+            if (in.hasNext()) {
                 String s = in.nextLine();
                 Scanner input = new Scanner(s);
 
                 String material = input.next();
 
-                if(material.equals("end") || material.equals("trial"))
+                if (material.equals("end") || material.equals("trial"))
                     return;
 
                 if (!input.hasNext()) {
@@ -159,6 +145,7 @@ public class TrialCapsuleSorting {
                     continue;
                 }
                 String storedMaterial = input.next();
+
                 if (!input.hasNextInt()) {
                     System.out.println("Не хватает данных\n" + BARREL_CLUE);
                     continue;
@@ -173,22 +160,19 @@ public class TrialCapsuleSorting {
 
                 input.close();
             }
-
         }
     }
 
     private void parseHuman(Scanner in) {
         System.out.println(HUMAN_CLUE + EXIT_CLUE);
-        while (true)
-        {
-            if (in.hasNext())
-            {
+        while (true) {
+            if (in.hasNext()) {
                 String s = in.nextLine();
                 Scanner input = new Scanner(s);
 
                 String gender = input.next();
 
-                if(gender.equals("end") || gender.equals("trial"))
+                if (gender.equals("end") || gender.equals("trial"))
                     return;
 
                 if (!input.hasNext()) {
@@ -196,10 +180,12 @@ public class TrialCapsuleSorting {
                     continue;
                 }
                 String lastName = input.next();
+
                 if (!input.hasNextInt()) {
                     System.out.println("Не хватает данных\n" + HUMAN_CLUE);
                     continue;
                 }
+
                 int age = input.nextInt();
 
                 dataR.add(new Human.Builder()
@@ -210,7 +196,6 @@ public class TrialCapsuleSorting {
 
                 input.close();
             }
-
         }
     }
 }

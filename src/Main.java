@@ -7,16 +7,16 @@ public class Main {
     public static final int HUMAN = 2;
 
     public static final String HELP =
-            "Вас приветствуют Андрей, Иван, Дмитрий, Антон и ...\n" +
-            "Программа управляется консольным вводом и принимает следующие команды:\n" +
+            "Вас приветствуют Андрей, Иван, Дмитрий, Антон и Кирилл ( ‾́ ◡ ‾́ )\n" +
+                    "Программа управляется консольным вводом и принимает следующие команды:\n" +
                     "\t[trial] [help] - информация о программе и ее управлении.\n" +
                     "\t[trial] [input] - переводит программу в режим ввода данных\n" +
-                        "\t\t [animal] задает соответствующий тип данных\n" +
-                        "\t\t [barrel] задает соответствующий тип данных\n" +
-                        "\t\t [human] задает соответствующий тип данных\n" +
-                            "\t\t\t [console] переводит программу в режим ввода с консоли\n" +
-                            "\t\t\t [random] ?[можете указать количество] программа генерирует данные самостоятельно\n" +
-                            "\t\t\t [file] импорт данных из файла\n" +
+                    "\t\t [animal] задает соответствующий тип данных\n" +
+                    "\t\t [barrel] задает соответствующий тип данных\n" +
+                    "\t\t [human] задает соответствующий тип данных\n" +
+                    "\t\t\t [console] переводит программу в режим ввода с консоли\n" +
+                    "\t\t\t [random] ?[можете указать количество] программа генерирует данные самостоятельно\n" +
+                    "\t\t\t [file] импорт данных из файла\n" +
                     "\t[trial] [sort]\n" +
                     "\t[trial] [search]\n" +
                     "\t[trial] [save]\n" +
@@ -32,16 +32,14 @@ public class Main {
 
         System.out.println(HELP);
 
-        while (roundCondition)
-        {
+        while (roundCondition) {
             if (!in.hasNext())
                 continue;
 
             String s = in.nextLine();
             Scanner commandLine = new Scanner(s);
 
-            if (commandLine.next().equals("trial"))
-            {
+            if (commandLine.next().equals("trial")) {
                 if (!commandLine.hasNext())
                     continue;
 
@@ -51,13 +49,13 @@ public class Main {
                         break;
 
                     case "input":
-                        if(input(in, commandLine, trialCapsuleSorting) &&
+                        if (input(in, commandLine, trialCapsuleSorting) &&
                                 !trialCapsuleSorting.isEmptyList())
                             trialCapsuleSorting.listToStringTest();
                         break;
 
                     case "sort":
-                        if(!trialCapsuleSorting.isEmptyList()) {
+                        if (!trialCapsuleSorting.isEmptyList()) {
                             trialCapsuleSorting.startSort();
                             trialCapsuleSorting.listToStringTest();
                         }
@@ -67,7 +65,7 @@ public class Main {
                         break;
 
                     case "save":
-                        if(!trialCapsuleSorting.isEmptyList())
+                        if (!trialCapsuleSorting.isEmptyList())
                             trialCapsuleSorting.save();
                         break;
 
@@ -75,17 +73,15 @@ public class Main {
                         roundCondition = false;
                         break;
                 }
-
             }
-            commandLine.close();
 
+            commandLine.close();
         }
 
         in.close();
     }
 
-    private static boolean input(Scanner in, Scanner commandLine, TrialCapsuleSorting trialCapsuleSorting)
-    {
+    private static boolean input(Scanner in, Scanner commandLine, TrialCapsuleSorting trialCapsuleSorting) {
         if (!commandLine.hasNext()) {
             System.out.println("Укажите тип данных");
             return false;
@@ -116,22 +112,21 @@ public class Main {
                 trialCapsuleSorting.inputFromConsole(in);
                 break;
             case "random":
-                trialCapsuleSorting.inputRandom(commandLine.hasNextInt()? commandLine.nextInt():10);
+                trialCapsuleSorting.inputRandom(commandLine.hasNextInt() ? commandLine.nextInt() : 10);
                 break;
             case "file":
-                trialCapsuleSorting.inputFromFile(in.next());
+                trialCapsuleSorting.UploadFromFile();
                 break;
             default:
                 System.out.println("Укажите источник данных");
                 return false;
         }
 
-        System.out.println("Данные добавлены");
+        System.out.println("Данные добавлены"); // хз тут пишет это если данные не сохранены или не загружены консолька сложная оч)
         return true;
     }
 
-    private static void search(Scanner in, TrialCapsuleSorting trialCapsuleSorting)
-    {
+    private static void search(Scanner in, TrialCapsuleSorting trialCapsuleSorting) {
         if (!in.hasNext())
             return;
 
@@ -146,7 +141,5 @@ public class Main {
                 trialCapsuleSorting.startBinarySearch(HUMAN, in);
                 break;
         }
-
     }
-
 }

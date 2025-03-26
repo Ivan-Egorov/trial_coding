@@ -1,3 +1,4 @@
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.stream.Stream;
 
@@ -7,7 +8,7 @@ import java.util.stream.Stream;
  * При этом, TrialList не наследуются от интерфейсов Iterable, Collection и List.
  * TrialList не работает с коллекциями, но может работать с массивами.
  */
-public class TrialList<A> {
+public class TrialList<A> implements Serializable {
     private A[] list;
     private int count;
 
@@ -138,4 +139,3 @@ public class TrialList<A> {
         return list[index];
     }
 }
-
