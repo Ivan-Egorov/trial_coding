@@ -29,8 +29,6 @@ public class TrialCapsuleSorting {
     }
 
     public void inputRandom(int count) {
-        System.out.println("count - " + count);
-
         GenerateUnit genUnit = switch (typeData) {
             case Main.ANIMAL -> new GeneratorAnimal();
             case Main.BARREL -> new GeneratorBarrel();

@@ -16,7 +16,7 @@ public class TrialBinarySearch<A extends TrialComparable<A>> {
         int middle;
 
         while (start <= end) {
-            if (start == end && trialList.get(start).equals(objectToFind)) {
+            if (start == end && trialList.get(start).compareTo(objectToFind) == 0) {
                 return start;
             } else if (start == end) {
                 return -1;
