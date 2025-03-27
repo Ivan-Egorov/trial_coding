@@ -1,6 +1,6 @@
 import java.io.Serializable;
 
-class Human implements TrialComparable<Human>, Serializable {
+public class Human implements TrialComparable<Human>, Serializable {
     private String gender;
     private int age;
     private String lastName;

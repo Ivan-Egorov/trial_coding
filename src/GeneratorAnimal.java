@@ -1,6 +1,6 @@
 import java.util.Random;
 
-public class GeneratorAnimal implements GenerateUnit<Animal>{
+public class GeneratorAnimal {
 
     private static final String[] species = {"Cat", "Dog", "Rabbit", "Hamster", "Rat", "Parrot",
             "Turtle", "Cow", "Horse", "Pig", "Sheep", "Chicken", "Duck",
@@ -9,7 +9,6 @@ public class GeneratorAnimal implements GenerateUnit<Animal>{
 
     private static final String[] уyeColors = {"blue", "brown", "green", "grey", "hazel", "amber"};
 
-    @Override
     public Animal getUnit() {
         Random random = new Random();
         return (new Animal.Builder()

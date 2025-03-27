@@ -1,6 +1,6 @@
 import java.io.Serializable;
 
-class Barrel implements TrialComparable<Barrel>, Serializable {
+public class Barrel implements TrialComparable<Barrel>, Serializable {
     private int volume;
     private String storedMaterial;
     private String material;

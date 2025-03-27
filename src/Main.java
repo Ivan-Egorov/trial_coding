@@ -2,10 +2,6 @@ import java.util.Scanner;
 
 public class Main {
 
-    public static final int ANIMAL = 0;
-    public static final int BARREL = 1;
-    public static final int HUMAN = 2;
-
     public static final String HELP =
             "Вас приветствуют Андрей, Иван, Дмитрий, Антон и Кирилл ( ‾́ ◡ ‾́ )\n" +
                     "Программа управляется консольным вводом и принимает следующие команды:\n" +
@@ -28,7 +24,7 @@ public class Main {
 
         boolean roundCondition = true;
 
-        TrialCapsuleSorting trialCapsuleSorting = new TrialCapsuleSorting();
+        TrialStrategySorting trialStrategySorting = null;
 
         System.out.println(HELP);
 
@@ -49,26 +45,31 @@ public class Main {
                         break;
 
                     case "input":
-                        if (input(in, commandLine, trialCapsuleSorting) &&
-                                !trialCapsuleSorting.isEmptyList())
-                            trialCapsuleSorting.listToStringTest();
+                        trialStrategySorting = input(in, commandLine);
+                        if(trialStrategySorting != null && !trialStrategySorting.isEmptyList())
+                            trialStrategySorting.listToStringTest();
                         break;
 
                     case "sort":
-                        if (!trialCapsuleSorting.isEmptyList()) {
-                            trialCapsuleSorting.startSort();
-                            trialCapsuleSorting.listToStringTest();
-                        }
+                        if (trialStrategySorting != null && !trialStrategySorting.isEmptyList()) {
+                            trialStrategySorting.startSort();
+                            trialStrategySorting.listToStringTest();
+                        } else
+                            System.out.println("Нет данных для сортировки");
                         break;
 
                     case "search":
-                        if (!trialCapsuleSorting.isEmptyList())
-                            trialCapsuleSorting.startBinarySearch(in);
+                        if (trialStrategySorting != null && !trialStrategySorting.isEmptyList())
+                            trialStrategySorting.startBinarySearch(in);
+                        else
+                            System.out.println("Коллекция пуста, невозможно выполнить поиск");
                         break;
 
                     case "save":
-                        if (!trialCapsuleSorting.isEmptyList())
-                            trialCapsuleSorting.save();
+                        if (trialStrategySorting != null && !trialStrategySorting.isEmptyList())
+                            trialStrategySorting.save();
+                        else
+                            System.out.println("Коллекция пуста, нет данных для сохранения");
                         break;
 
                     case "exit":
@@ -83,47 +84,49 @@ public class Main {
         in.close();
     }
 
-    private static boolean input(Scanner in, Scanner commandLine, TrialCapsuleSorting trialCapsuleSorting) {
+    private static TrialStrategySorting input(Scanner in, Scanner commandLine) {
         if (!commandLine.hasNext()) {
             System.out.println("Укажите тип данных");
-            return false;
+            return null;
         }
+
+        TrialStrategySorting trialStrategySorting  = null;
 
         switch (commandLine.next()) {
             case "animal":
-                trialCapsuleSorting.setTypeData(ANIMAL);
+                trialStrategySorting = new AnimalStrategySorting();
                 break;
             case "barrel":
-                trialCapsuleSorting.setTypeData(BARREL);
+                trialStrategySorting = new BarrelStrategySorting();
                 break;
             case "human":
-                trialCapsuleSorting.setTypeData(HUMAN);
+                trialStrategySorting = new HumanStrategySorting();
                 break;
             default:
                 System.out.println("Укажите тип данных");
-                return false;
+                return null;
         }
 
         if (!commandLine.hasNext()) {
             System.out.println("Укажите источник данных");
-            return false;
+            return null;
         }
 
         switch (commandLine.next()) {
             case "console":
-                trialCapsuleSorting.inputFromConsole(in);
+                trialStrategySorting.inputFromConsole(in);
                 break;
             case "random":
-                trialCapsuleSorting.inputRandom(commandLine.hasNextInt() ? commandLine.nextInt() : 10);
+                trialStrategySorting.inputRandom(commandLine.hasNextInt() ? commandLine.nextInt() : 10);
                 break;
             case "file":
-                trialCapsuleSorting.UploadFromFile();
+                trialStrategySorting.UploadFromFile();
                 break;
             default:
                 System.out.println("Укажите источник данных");
-                return false;
+                return null;
         }
 
-        return true;
+        return trialStrategySorting;
     }
 }

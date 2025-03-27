@@ -1,6 +1,6 @@
 import java.util.Random;
 
-public class GeneratorBarrel implements GenerateUnit<Barrel>{
+public class GeneratorBarrel {
 
     private static final String[] materials = {"Cedar", "Birch", "Oak", "Pine", "Beech", "Alder",
             "Fir", "Aspen", "Spruce", "Apple tree", "Plane", "Maple", "Linden",
@@ -9,7 +9,6 @@ public class GeneratorBarrel implements GenerateUnit<Barrel>{
     private static final String[] storedMaterials = {"Wine", "Milk", "Cream", "Cognac", "Whiskey", "Tequila",
             "Water"};
 
-    @Override
     public Barrel getUnit() {
         Random random = new Random();
         return new Barrel.Builder()

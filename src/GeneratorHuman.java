@@ -1,6 +1,6 @@
 import java.util.Random;
 
-public class GeneratorHuman implements GenerateUnit<Human> {
+public class GeneratorHuman {
 
     private static final String[] genders = {"male", "female", "man", "woman", "m", "w"};
 
@@ -9,7 +9,6 @@ public class GeneratorHuman implements GenerateUnit<Human> {
             "Sergeev", "Darwin", "Dumas", "Trauberg", "Zubkov", "Fedorov",
             "Zhadan", "Zhukovsky", "Zaitsev", "Zubkov", "Suvorov", "Sukhorukov"};
 
-    @Override
     public Human getUnit() {
         Random random = new Random();
         return new Human.Builder()
