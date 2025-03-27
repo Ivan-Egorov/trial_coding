@@ -44,23 +44,53 @@ public class TrialCapsuleSorting {
     }
 
     public void inputFromConsole(Scanner in) {
-        switch (typeData) {
-            case Main.ANIMAL:
-                parseAnimal(in);
-                break;
-            case Main.BARREL:
-                parseBarrel(in);
-                break;
-            case Main.HUMAN:
-                parseHuman(in);
-                break;
-        }
+        fillListFromConsole(in);
         System.out.println("Ввод окончен");
     }
 
-    public void startBinarySearch(int typeData, Scanner in) {
-        if (typeData != this.typeData)
-            return;
+    public void startBinarySearch(Scanner in) {
+        TrialSort.sort(dataR);
+        int index = -1;
+        System.out.println(getClue() + EXIT_CLUE);
+        if (in.hasNext()) {
+            String s = in.nextLine();
+            Scanner input = new Scanner(s);
+
+            if((s.contains("end") && s.indexOf("end") == 0) ||
+                    (s.contains("trial")&& s.indexOf("trial") == 0))
+                return;
+
+            try {
+                switch (typeData) {
+                    case Main.ANIMAL:
+                        Animal animal = parseAnimal(input);
+                        TrialBinarySearch<Animal> binarySearchAnimal = new TrialBinarySearch<Animal>();
+                        index = binarySearchAnimal.find(dataR, animal);
+                        break;
+                    case Main.BARREL:
+                        Barrel barrel = parseBarrel(input);
+                        TrialBinarySearch<Barrel> binarySearchBarrel = new TrialBinarySearch<Barrel>();
+                        index = binarySearchBarrel.find(dataR, barrel);
+                        break;
+                    case Main.HUMAN:
+                        Human human = parseHuman(input);
+                        TrialBinarySearch<Human> binarySearchHuman = new TrialBinarySearch<Human>();
+                        index = binarySearchHuman.find(dataR, human);
+                        break;
+                }
+
+            } catch (CustomException e) {
+                System.out.println(e.getMessage());
+            } finally {
+                input.close();
+            }
+
+            if (index == -1)
+                System.out.println("Элемент не найден");
+            else
+                System.out.println("Элемент находится в коллекции на позиции - " + index + "\n" +
+                        dataR.get(index).toString());
+        }
     }
 
     public void startSort() {
@@ -82,123 +112,130 @@ public class TrialCapsuleSorting {
 
     }
 
-    private void parseAnimal(Scanner in) {
+    private void fillListFromConsole(Scanner in)
+    {
+        System.out.println(getClue() + EXIT_CLUE);
 
-        System.out.println(ANIMAL_CLUE + EXIT_CLUE);
         while (true) {
             if (in.hasNext()) {
                 String s = in.nextLine();
                 Scanner input = new Scanner(s);
 
+                if((s.contains("end") && s.indexOf("end") == 0) ||
+                        (s.contains("trial")&& s.indexOf("trial") == 0))
+                    return;
+
                 try {
-                    String species = TrialValidator.StringValidate(input.next(), "[Тип животного - строка]");
-
-                    if (species.equals("end") || species.equals("trial"))
-                        return;
-
-                    if (!input.hasNext())
-                        throw new CustomException("[Цвет глаз - строка]");
-
-                    String eyeColor = TrialValidator.StringValidate(input.next(), "[Цвет глаз - строка]");
-
-                    if (!input.hasNextBoolean())
-                        throw new CustomException("[Наличие шерсти - true/false]");
-
-                    boolean hasFur = input.nextBoolean();
-
-                    if (!input.hasNextInt())
-                        throw new CustomException("[Вес - от 1 до 300 кг]");
-
-                    int weigth = TrialValidator.IntValidate(input.nextInt(), 1, 300, "Вес за пределами диапазона 1 - 300");
-
-                    dataR.add(new Animal.Builder()
-                            .setSpecies(species)
-                            .setEyeColor(eyeColor)
-                            .setWeigth(weigth)
-                            .setHasFur(hasFur)
-                            .build());
+                    switch (typeData) {
+                        case Main.ANIMAL:
+                            dataR.add(parseAnimal(input));
+                            break;
+                        case Main.BARREL:
+                            dataR.add(parseBarrel(input));
+                            break;
+                        case Main.HUMAN:
+                            dataR.add(parseHuman(input));
+                            break;
+                    }
 
                 } catch (CustomException e) {
-                    System.out.println("Некорректный ввод - " + e.getMessage() + "\n" + ANIMAL_CLUE);
+                    System.out.println(e.getMessage());
+                } finally {
+                    input.close();
                 }
-
-                input.close();
             }
+
         }
     }
 
-    private void parseBarrel(Scanner in) {
+    private String getClue()
+    {
+        if (typeData == Main.BARREL)
+            return BARREL_CLUE;
 
-        System.out.println(BARREL_CLUE + EXIT_CLUE);
-        while (true) {
-            if (in.hasNext()) {
-                String s = in.nextLine();
-                Scanner input = new Scanner(s);
+        if (typeData == Main.HUMAN)
+            return HUMAN_CLUE;
 
-                try {
-                    String material = TrialValidator.StringValidate(input.next(), "[Материал бочки - строка]");
+        return ANIMAL_CLUE;
+    }
 
-                    if (material.equals("end") || material.equals("trial"))
-                        return;
+    private Animal parseAnimal(Scanner input) throws CustomException {
+        try {
 
-                    if (!input.hasNext())
-                        throw new CustomException("[Хранимый материал - строка]");
+            String species = TrialValidator.StringValidate(input.next(), "[Тип животного - строка]");
 
-                    String storedMaterial = TrialValidator.StringValidate(input.next(), "[Хранимый материал - строка]");
+            if (!input.hasNext())
+                throw new CustomException("[Цвет глаз - строка]");
 
-                    if (!input.hasNextInt())
-                        throw new CustomException("[Объем - от 1 до 1000 л]");
+            String eyeColor = TrialValidator.StringValidate(input.next(), "[Цвет глаз - строка]");
 
-                    int volume = TrialValidator.IntValidate(input.nextInt(), 1, 1000, "[Объем - от 1 до 1000 л]");
+            if (!input.hasNextBoolean())
+                throw new CustomException("[Наличие шерсти - true/false]");
 
-                    dataR.add(new Barrel.Builder()
-                            .setMaterial(material)
-                            .setStoredMaterial(storedMaterial)
-                            .setVolume(volume)
-                            .build());
-                } catch (CustomException e) {
-                    System.out.println("Некорректный ввод - " + e.getMessage() + "\n" + BARREL_CLUE);
-                }
+            boolean hasFur = input.nextBoolean();
 
-                input.close();
-            }
+            if (!input.hasNextInt())
+                throw new CustomException("[Вес - от 1 до 300 кг]");
+
+            int weigth = TrialValidator.IntValidate(input.nextInt(), 1, 300, "Вес за пределами диапазона 1 - 300");
+
+            return new Animal.Builder()
+                    .setSpecies(species)
+                    .setEyeColor(eyeColor)
+                    .setWeigth(weigth)
+                    .setHasFur(hasFur)
+                    .build();
+
+        } catch (CustomException e) {
+            throw new CustomException("Некорректный ввод - " + e.getMessage() + "\n" + ANIMAL_CLUE);
         }
     }
 
-    private void parseHuman(Scanner in) {
-        System.out.println(HUMAN_CLUE + EXIT_CLUE);
-        while (true) {
-            if (in.hasNext()) {
-                String s = in.nextLine();
-                Scanner input = new Scanner(s);
+    private Barrel parseBarrel(Scanner input) throws CustomException {
+        try {
+            String material = TrialValidator.StringValidate(input.next(), "[Материал бочки - строка]");
 
-                try {
-                    String gender = TrialValidator.StringValidate(input.next(), "[Пол человека - строка]");
+            if (!input.hasNext())
+                throw new CustomException("[Хранимый материал - строка]");
 
-                    if (gender.equals("end") || gender.equals("trial"))
-                        return;
+            String storedMaterial = TrialValidator.StringValidate(input.next(), "[Хранимый материал - строка]");
 
-                    if (!input.hasNext())
-                        throw new CustomException("[Фамилия - строка]");
+            if (!input.hasNextInt())
+                throw new CustomException("[Объем - от 1 до 1000 л]");
 
-                    String lastName = TrialValidator.StringValidate(input.next(), "[Фамилия - строка]");
+            int volume = TrialValidator.IntValidate(input.nextInt(), 1, 1000, "[Объем - от 1 до 1000 л]");
 
-                    if (!input.hasNextInt())
-                        throw new CustomException("[Возраст - от 14 до 89]");
+            return new Barrel.Builder()
+                    .setMaterial(material)
+                    .setStoredMaterial(storedMaterial)
+                    .setVolume(volume)
+                    .build();
+        } catch (CustomException e) {
+            throw new CustomException("Некорректный ввод - " + e.getMessage() + "\n" + BARREL_CLUE);
+        }
+    }
 
-                    int age = TrialValidator.IntValidate(input.nextInt(), 14, 89, "[Возраст - от 14 до 89]");
+    private Human parseHuman(Scanner input) throws CustomException {
+        try {
+            String gender = TrialValidator.StringValidate(input.next(), "[Пол человека - строка]");
 
-                    dataR.add(new Human.Builder()
-                            .setGender(gender)
-                            .setLastName(lastName)
-                            .setAge(age)
-                            .build());
-                } catch (CustomException e) {
-                    System.out.println("Некорректный ввод - " + e.getMessage() + "\n" + HUMAN_CLUE);
-                }
+            if (!input.hasNext())
+                throw new CustomException("[Фамилия - строка]");
 
-                input.close();
-            }
+            String lastName = TrialValidator.StringValidate(input.next(), "[Фамилия - строка]");
+
+            if (!input.hasNextInt())
+                throw new CustomException("[Возраст - от 14 до 89]");
+
+            int age = TrialValidator.IntValidate(input.nextInt(), 89, 14, "[Возраст - от 14 до 89]");
+
+            return new Human.Builder()
+                    .setGender(gender)
+                    .setLastName(lastName)
+                    .setAge(age)
+                    .build();
+        } catch (CustomException e) {
+            throw new CustomException("Некорректный ввод - " + e.getMessage() + "\n" + HUMAN_CLUE);
         }
     }
 }

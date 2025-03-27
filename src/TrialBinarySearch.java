@@ -1,4 +1,4 @@
-public class TrialBinarySearch<A extends Comparable<A>> {
+public class TrialBinarySearch<A extends TrialComparable<A>> {
 
     public TrialBinarySearch() {
     }
