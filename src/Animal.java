@@ -1,6 +1,6 @@
 import java.io.Serializable;
 
-class Animal implements Comparable<Animal>, Serializable {
+class Animal implements TrialComparable<Animal>, Serializable {
 
     private String species;
     private String eyeColor;

@@ -15,11 +15,11 @@ public class TrialSort {
         for (int i = left + 1; i <= right; i++) {
             Object tempI = array[i];
             int j = i - 1;
-            Comparable key = (Comparable) array[j];
+            TrialComparable key = (TrialComparable) array[j];
             while (j >= 0 && key.compareTo(tempI) > 0 && j >= left) {
                 array[j + 1] = array[j];
                 j--;
-                key = j >= 0 ? (Comparable) array[j] : null;
+                key = j >= 0 ? (TrialComparable) array[j] : null;
             }
             array[j + 1] = tempI;
         }
@@ -44,7 +44,7 @@ public class TrialSort {
         int k = left;
 
         while (i < leftArrLen && j < rightArrLen) {
-            Comparable tmp = (Comparable) leftArr[i];
+            TrialComparable tmp = (TrialComparable) leftArr[i];
             if (tmp.compareTo(rightArr[j]) <= 0) {
                 array[k] = leftArr[i];
                 i++;
@@ -69,7 +69,7 @@ public class TrialSort {
     }
 
     @SuppressWarnings("unchecked")
-    public static <T extends Comparable<T>> TrialList<T> sort(TrialList<T> list) {
+    public static <T extends TrialComparable<T>> TrialList<T> sort(TrialList<T> list) {
 
         Object[] array = list.toArray();
 
