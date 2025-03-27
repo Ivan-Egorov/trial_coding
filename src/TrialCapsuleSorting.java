@@ -61,8 +61,6 @@ public class TrialCapsuleSorting {
     public void startBinarySearch(int typeData, Scanner in) {
         if (typeData != this.typeData)
             return;
-
-
     }
 
     public void startSort() {

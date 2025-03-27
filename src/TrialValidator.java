@@ -1,6 +1,6 @@
 public class TrialValidator {
     public static String StringValidate(String target, String message) throws CustomException {
-        String regex = "[a-zA-Z]*";
+        String regex = "[a-zA-ZА-Яа-яЁё]*";
         if (target == null || target.isEmpty() || !target.matches(regex)) { 
             throw new CustomException(message);
         }       
