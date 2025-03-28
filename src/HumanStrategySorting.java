@@ -5,6 +5,8 @@ public class HumanStrategySorting implements TrialStrategySorting{
     private TrialList<Human> dataR = new TrialList<>();
     private TrialDataHandler<Human> dataHandler = new TrialDataHandler<>();
 
+    private int indexSearchElement = -1;
+
     @Override
     public boolean isEmptyList() {
         return dataR == null || dataR.isEmpty();
@@ -17,18 +19,19 @@ public class HumanStrategySorting implements TrialStrategySorting{
         for (int i = 0; i < count; i++) {
             dataR.add(genUnit.getUnit());
         }
+        indexSearchElement = -1;
     }
 
     @Override
     public void inputFromConsole(Scanner in) {
         fillListFromConsole(in);
+        indexSearchElement = -1;
         System.out.println("Ввод окончен");
     }
 
     @Override
     public void startBinarySearch(Scanner in) {
         TrialSort.sort(dataR);
-        int index = -1;
         System.out.println(HUMAN_CLUE + EXIT_CLUE);
         if (in.hasNext()) {
             String s = in.nextLine();
@@ -41,18 +44,18 @@ public class HumanStrategySorting implements TrialStrategySorting{
             try {
                 Human human = parseHuman(input);
                 TrialBinarySearch<Human> binarySearchHuman = new TrialBinarySearch<Human>();
-                index = binarySearchHuman.find(dataR, human);
+                indexSearchElement = binarySearchHuman.find(dataR, human);
             } catch (CustomException e) {
                 System.out.println(e.getMessage());
             } finally {
                 input.close();
             }
 
-            if (index == -1)
+            if (indexSearchElement == -1)
                 System.out.println("Элемент не найден");
             else
-                System.out.println("Элемент находится в коллекции на позиции - " + index + "\n" +
-                        dataR.get(index).toString());
+                System.out.println("Элемент находится в коллекции на позиции - " + indexSearchElement + "\n" +
+                        dataR.get(indexSearchElement).toString());
         }
     }
 
@@ -64,11 +67,18 @@ public class HumanStrategySorting implements TrialStrategySorting{
     @Override
     public void UploadFromFile() {
         dataR = dataHandler.UploadFromFile(dataR);
+        indexSearchElement = -1;
     }
 
     @Override
     public void save() {
-        dataHandler.Save(dataR);
+        if (indexSearchElement == -1)
+            dataHandler.Save(dataR);
+        else {
+            TrialList<Human> d = new TrialList<>();
+            d.add(dataR.get(indexSearchElement));
+            dataHandler.Save(d);
+        }
     }
 
     @Override

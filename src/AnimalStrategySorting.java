@@ -5,6 +5,8 @@ public class AnimalStrategySorting implements TrialStrategySorting {
     private TrialList<Animal> dataR = new TrialList<>();
     private TrialDataHandler<Animal> dataHandler = new TrialDataHandler<>();
 
+    private int indexSearchElement = -1;
+
     @Override
     public boolean isEmptyList() {
         return dataR == null || dataR.isEmpty();
@@ -17,18 +19,19 @@ public class AnimalStrategySorting implements TrialStrategySorting {
         for (int i = 0; i < count; i++) {
             dataR.add(genUnit.getUnit());
         }
+        indexSearchElement = -1;
     }
 
     @Override
     public void inputFromConsole(Scanner in) {
         fillListFromConsole(in);
+        indexSearchElement = -1;
         System.out.println("Ввод окончен");
     }
 
     @Override
     public void startBinarySearch(Scanner in) {
         TrialSort.sort(dataR);
-        int index = -1;
         System.out.println(ANIMAL_CLUE + EXIT_CLUE);
         if (in.hasNext()) {
             String s = in.nextLine();
@@ -41,18 +44,18 @@ public class AnimalStrategySorting implements TrialStrategySorting {
             try {
                 Animal animal = parseAnimal(input);
                 TrialBinarySearch<Animal> binarySearchAnimal = new TrialBinarySearch<Animal>();
-                index = binarySearchAnimal.find(dataR, animal);
+                indexSearchElement = binarySearchAnimal.find(dataR, animal);
             } catch (CustomException e) {
                 System.out.println(e.getMessage());
             } finally {
                 input.close();
             }
 
-            if (index == -1)
+            if (indexSearchElement == -1)
                 System.out.println("Элемент не найден");
             else
-                System.out.println("Элемент находится в коллекции на позиции - " + index + "\n" +
-                        dataR.get(index).toString());
+                System.out.println("Элемент находится в коллекции на позиции - " + indexSearchElement + "\n" +
+                        dataR.get(indexSearchElement).toString());
         }
     }
 
@@ -64,11 +67,18 @@ public class AnimalStrategySorting implements TrialStrategySorting {
     @Override
     public void UploadFromFile() {
         dataR = dataHandler.UploadFromFile(dataR);
+        indexSearchElement = -1;
     }
 
     @Override
     public void save() {
-        dataHandler.Save(dataR);
+        if (indexSearchElement == -1)
+            dataHandler.Save(dataR);
+        else {
+            TrialList<Animal> d = new TrialList<>();
+            d.add(dataR.get(indexSearchElement));
+            dataHandler.Save(d);
+        }
     }
 
     public void listToStringTest() {
